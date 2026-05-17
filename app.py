@@ -125,15 +125,13 @@ user_text = st.text_area(
 
 # כפתור הוספת אירוע
 if st.button(f"הוסף את התוכניות של {current_user}"):
-    if not api_key:
-        st.error("אנא הכניסי מפתח API בסרגל הצידי.")
-    elif user_text.strip() == "":
+    if user_text.strip() == "":
         st.warning("אנא הקלידי טקסט כלשהו.")
     else:
         with st.spinner("הסוכן מעבד ומעדכן את השרת המשותף..."):
             try:
                 # הרצת ה-AI לחילוץ האירועים
-                parsed_output = parse_family_inputs(user_text, api_key)
+                parsed_output = parse_family_inputs(user_text)
                 
                 # עדכון שמות האנשים בהתאם לבחירה בממשק
                 for event in parsed_output.events:
