@@ -73,11 +73,32 @@ def parse_family_inputs(raw_text: str):
 # ==========================================
 st.set_page_config(page_title="חמ\"ל סופ\"ש", page_icon="🏡", layout="centered")
 
+# הגדרת כיווניות מימין לשמאל (RTL) עבור כל האפליקציה כדי שהעברית תשב בול
+st.markdown(
+    """
+    <style>
+    /* הופך את כיוון הטקסט לכל האפליקציה */
+    .stApp {
+        direction: RTL;
+        text-align: right;
+    }
+    /* מוודא שתיבות הטקסט והטבלאות יתיישרו לימין */
+    div[data-baseweb="select"] {
+        direction: RTL;
+    }
+    div[data-testid="stMarkdownContainer"] {
+        text-align: right;
+    }
+    th, td {
+        text-align: right !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🏡 חמ\"ל סופ\"ש - FamilySync Agent")
 st.write("כל אחד מזין את התוכניות שלו מהטלפון, והסוכן מסנכרן את הלו\"ז המשותף של כולם!")
-
-# סרגל צידי לאבטחה והגדרות
-api_key = st.sidebar.text_input("הכניסי את מפתח ה-OpenAI API שלך:", type="password")
 
 # טעינת הלו"ז המעודכן ביותר מהקובץ המשותף בשרת
 current_db_events = load_schedule()
