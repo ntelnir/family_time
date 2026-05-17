@@ -2,6 +2,7 @@ import streamlit as st
 from openai import OpenAI
 from pydantic import BaseModel
 from typing import List, Optional
+import urllib.parse
 import json
 import os
 
@@ -115,6 +116,20 @@ placeholder_texts = {
     "ליבי": "למשל: מגיעה ברכבת של חמישי בערב, בשבת צריכה ללמוד למבחן",
     "אירוע משותף (כולם)": "למשל: ארוחת ערב שישי אצלנו בבית ב-19:30, כולם חייבים להיות"
 }
+
+# ניסוח ההודעה וקידוד ה-URL שלה (כדי שהרווחים והעברית יעברו טוב)
+whatsapp_msg = "בוקר טוב משפחה! שבוע חדש התחיל וחמ\"ל סופ\"ש פתוח לעדכונים. אנא היכנסו ללינק ועדכנו את הלו\"ז שלכם: https://ntelnir-familytime.streamlit.app"
+encoded_msg = urllib.parse.quote(whatsapp_msg)
+whatsapp_url = f"https://wa.me/?text={encoded_msg}"
+
+# הצגת כפתור מעוצב בממשק
+st.sidebar.markdown(
+    f'<a href="{whatsapp_url}" target="_blank">'
+    '<button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:5px; font-weight:bold; cursor:pointer;">'
+    'תזכורת בוואטסאפ המשפחתי'
+    '</button></a>',
+    unsafe_allow_html=True
+)
 
 user_text = st.text_area(
     f"היי {current_user}, מה התוכניות או האילוצים שלך לסופ\"ש הקרוב?", 
