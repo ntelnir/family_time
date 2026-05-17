@@ -93,6 +93,10 @@ st.markdown(
     th, td {
         text-align: right !important;
     }
+    /* תיקון לניידים - מונע מהאלמנטים לצוף או לחפוף */
+    .element-container {
+        direction: RTL;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -100,6 +104,16 @@ st.markdown(
 
 st.title("🏡 חמ\"ל סופ\"ש - FamilySync Agent")
 st.write("כל אחד מזין את התוכניות שלו מהטלפון, והסוכן מסנכרן את הלו\"ז המשותף של כולם!")
+
+# ניסוח ההודעה וקידוד ה-URL שלה (כדי שהרווחים והעברית יעברו טוב)
+whatsapp_msg = "בוקר טוב משפחה! שבוע חדש התחיל וחמ\"ל סופ\"ש פתוח לעדכונים. אנא היכנסו ללינק ועדכנו את הלו\"ז שלכם: https://ntelnir-familytime.streamlit.app"
+encoded_msg = urllib.parse.quote(whatsapp_msg)
+whatsapp_url = f"https://wa.me/?text={encoded_msg}"
+
+# הצגת כפתור מעוצב בממשק
+st.link_button("🟢 שלח תזכורת בוואטסאפ המשפחתי", whatsapp_url, use_container_width=True)
+
+st.markdown("---") # קו מפריד
 
 # טעינת הלו"ז המעודכן ביותר מהקובץ המשותף בשרת
 current_db_events = load_schedule()
@@ -116,20 +130,6 @@ placeholder_texts = {
     "ליבי": "למשל: מגיעה ברכבת של חמישי בערב, בשבת צריכה ללמוד למבחן",
     "אירוע משותף (כולם)": "למשל: ארוחת ערב שישי אצלנו בבית ב-19:30, כולם חייבים להיות"
 }
-
-# ניסוח ההודעה וקידוד ה-URL שלה (כדי שהרווחים והעברית יעברו טוב)
-whatsapp_msg = "בוקר טוב משפחה! שבוע חדש התחיל וחמ\"ל סופ\"ש פתוח לעדכונים. אנא היכנסו ללינק ועדכנו את הלו\"ז שלכם: https://ntelnir-familytime.streamlit.app"
-encoded_msg = urllib.parse.quote(whatsapp_msg)
-whatsapp_url = f"https://wa.me/?text={encoded_msg}"
-
-# הצגת כפתור מעוצב בממשק
-st.sidebar.markdown(
-    f'<a href="{whatsapp_url}" target="_blank">'
-    '<button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:5px; font-weight:bold; cursor:pointer;">'
-    'תזכורת בוואטסאפ המשפחתי'
-    '</button></a>',
-    unsafe_allow_html=True
-)
 
 user_text = st.text_area(
     f"היי {current_user}, מה התוכניות או האילוצים שלך לסופ\"ש הקרוב?", 
